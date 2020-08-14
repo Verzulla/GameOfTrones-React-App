@@ -10,8 +10,11 @@ const RandomBlock = styled.div`
     padding: 25px 25px 15px 25px;
     margin-bottom: 40px;
     h4 {
-    margin-bottom: 20px;
-    text-align: center;
+        margin-bottom: 20px;
+        text-align: center;
+        border-bottom: 1px solid #bfbdbd; /* Параметры линии под текстом */
+        font-weight: normal; /* Убираем жирное начертание */
+        padding-bottom: 17px; 
     }
 
 `;
@@ -53,7 +56,7 @@ export default class RandomChar extends Component {
     }
 
     updateChar() {
-        const id = 10000000000000000;
+        const id = Math.floor(Math.random()*120 + 25);
         this.gotService.getCharacter(id)
             .then(this.onCharLoaded)
             .catch(this.onError);

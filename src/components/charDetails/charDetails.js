@@ -4,12 +4,16 @@ import styled from 'styled-components';
 
 
 const BlockCharDetails = styled.div`
+    border-radius: 5px;
     background-color: #fff;
     padding: 25px 25px 15px 25px;
     margin-bottom: 40px;
     h4 {
         margin-bottom: 20px;
         text-align: center; 
+        border-bottom: 1px solid #bfbdbd; /* Параметры линии под текстом */
+        font-weight: normal; /* Убираем жирное начертание */
+        padding-bottom: 17px; 
     }
 `;
 
