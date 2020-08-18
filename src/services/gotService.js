@@ -1,4 +1,6 @@
-export default class GotService {
+
+
+export default class gotService {
 
     constructor() {
         this._apiBase = 'https://www.anapioficeandfire.com/api';
@@ -12,7 +14,7 @@ export default class GotService {
         }
     
         return await res.json();
-    };
+    }
 
     async getAllCharacters() {
         const res = await this.getResource('/characters?page=5&pageSize=10');
@@ -44,16 +46,23 @@ export default class GotService {
             return data = 'No data:(';
         }
     }
-    _transformCharacter(char) {
+
+    _extractId = (item) => {
+        const idRegExp = /(\d+)/;
+        return item.url.match(idRegExp)[1];
+    }
+
+    _transformCharacter = (char) => {
         return {
-        name: this.isSet(char.name),
-        gender: this.isSet(char.gender),
-        born: this.isSet(char.born),
-        died: this.isSet(char.died),
-        culture: this.isSet(char.culture)
+            name: this.isSet(char.name),
+            gender: this.isSet(char.gender),
+            born: this.isSet(char.born),
+            died: this.isSet(char.died),
+            culture: this.isSet(char.culture),
+            id: this._extractId(char)
         }
     }
-    _transformHouse(house) {
+    _transformHouse = (house) => {
         return {
             name: house.name,
             region: house.region,
@@ -63,7 +72,7 @@ export default class GotService {
             ancesrtalWeapons: house.ancesrtalWeapons
             }
     }
-    _transformBook(book) {
+    _transformBook = (book) => {
         return {
             name: book.name,
             numberOfPage: book.numberOfPage,
