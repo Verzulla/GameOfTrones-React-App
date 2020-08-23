@@ -5,6 +5,19 @@ import gotService from '../../services/gotService';
 import Spinner from '../spinner';
 import ErrorMessage from '../errorMessage';
 
+class Field extends Component {
+    render () {
+        const {char, field, label} = this.props;
+        return (
+            <li className="list-group-item d-flex justify-content-between">
+                <Term className="term">{label}</Term>
+                <span>{char[field]}</span>
+            </li>
+        )
+    }
+};
+   
+export {Field};
 
 const BlockCharDetails = styled.div`
     border-radius: 5px;
@@ -69,10 +82,10 @@ export default class CharDetails extends Component {
     
     render() {
         const {char, loading, error} = this.state;
-
+        const fieldProps = this.props;
         const errorMessage = error ? <ErrorMessage/> : null;
         const spinner = loading ? <Spinner/> : null;
-        const content = !(loading || error) ? <View char={char}/> : null;
+        const content = !(loading || error) ? <View char={char} fieldProps={fieldProps}/> : null;
 
         if (!this.state.char) {
             return <span className="select-error">Please select a character</span>
@@ -89,29 +102,21 @@ export default class CharDetails extends Component {
     }  
 }
 
-const View = ({char}) => {
-    const {name, gender, born, died, culture} = char;
-    return (
-        <>
-            <h4>{name}</h4>
-            <ul className="list-group justify-content-between d-flex rounded list-group-flush">
-                <li className="list-group-item d-flex justify-content-between">
-                    <Term className="term">Gender</Term>
-                    <span>{gender}</span>
-                </li>
-                <li className="list-group-item d-flex justify-content-between">
-                    <Term className="term">Born</Term>
-                    <span>{born}</span>
-                </li>
-                <li className="list-group-item d-flex justify-content-between">
-                    <Term className="term">Died</Term>
-                    <span>{died}</span>
-                </li>
-                <li className="list-group-item d-flex justify-content-between">
-                    <Term className="term">Culture</Term>
-                    <span>{culture}</span>
-                </li>
-            </ul>
-        </>
-    )
-}
+class View extends Component {
+    render () {
+        const {char} = this.props;
+        const {name} = char;
+        return ( 
+            <>
+                <h4>{name}</h4>
+                <ul className="list-group justify-content-between d-flex rounded list-group-flush">
+                    {
+                        React.Children.map(this.props.fieldProps.children, (child) => {
+                            return React.cloneElement(child, {char})
+                        })
+                    }
+                </ul>
+            </>
+        )
+    }
+} 
