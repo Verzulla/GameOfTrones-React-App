@@ -24,7 +24,7 @@ export default class gotService {
     }
 
     getAllBooks = async () => {
-        const res = await this.getResource('/books/');
+        const res = await this.getResource('/books?page=1&pageSize=10');
         return res.map(this._transformBook);
     }
     getBook = async (id) => {
@@ -66,21 +66,21 @@ export default class gotService {
     }
     _transformHouse = (house) => {
         return {
-            name: house.name,
-            region: house.region,
-            words: house.words,
-            titles: house.titles,
-            overlord: house.overlord,
-            ancesrtalWeapons: house.ancesrtalWeapons,
+            name: this.isSet(house.name),
+            region: this.isSet(house.region),
+            words: this.isSet(house.words),
+            titles: this.isSet(house.titles),
+            overlord: this.isSet(house.overlord),
+            ancesrtalWeapons: this.isSet(house.ancesrtalWeapons),
             id: this._extractId(house)
             }
     }
     _transformBook = (book) => {
         return {
-            name: book.name,
-            numberOfPage: book.numberOfPage,
-            publiser: book.publiser,
-            reliased: book.reliased,
+            name: this.isSet(book.name),
+            numberOfPages: this.isSet(book.numberOfPages),
+            publisher: this.isSet(book.publisher),
+            released: this.isSet(book.released),
             id: this._extractId(book)
             }
     }

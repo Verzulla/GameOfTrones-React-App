@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import {Col, Row, Container} from 'reactstrap';
 import Header from '../header';
 import RandomChar from '../randomChar';
-import CharacterPage from '../characterPage';
+import CharacterPage from '../pages/characterPage';
 import styled from 'styled-components';
 import ErrorMessage from '../errorMessage';
-import ItemList from '../itemList';
-import CharDetails from '../charDetails';
 import gotService from '../../services/gotService';
+import BookPage from '../pages/booksPage';
+import HousePage from '../pages/housesPage';
 
 const ToggleButton = styled.button`
     background: rgb(29,74,91);
@@ -80,17 +80,9 @@ export default class App extends Component {
                         </Col> 
                     </Row>
                     <CharacterPage/>
-                    <Row>
-                        <Col md='6'>
-                            <ItemList 
-                                onItemSelected={this.onItemSelected}
-                                getData={this.gotService.getAllBooks}
-                                renderItem={(item) => item.name}/>
-                        </Col>
-                        <Col md='6'>
-                            <CharDetails charId={this.state.selectedChar}/>
-                        </Col>
-                    </Row>
+                    <BookPage/>
+                    <HousePage/>
+                    {/* 
                     <Row>
                         <Col md='6'>
                             <ItemList 
@@ -101,7 +93,7 @@ export default class App extends Component {
                         <Col md='6'>
                             <CharDetails charId={this.state.selectedChar}/>
                         </Col>
-                    </Row>
+                    </Row> */}
                 </Container>
             </>
         );

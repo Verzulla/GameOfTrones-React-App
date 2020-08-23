@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './charDetails.css';
+import './itemDetails.css';
 import styled from 'styled-components';
 import gotService from '../../services/gotService';
 import Spinner from '../spinner';
@@ -7,11 +7,11 @@ import ErrorMessage from '../errorMessage';
 
 class Field extends Component {
     render () {
-        const {char, field, label} = this.props;
+        const {item, field, label} = this.props;
         return (
             <li className="list-group-item d-flex justify-content-between">
                 <Term className="term">{label}</Term>
-                <span>{char[field]}</span>
+                <span>{item[field]}</span>
             </li>
         )
     }
@@ -19,7 +19,7 @@ class Field extends Component {
    
 export {Field};
 
-const BlockCharDetails = styled.div`
+const BlockItemDetails = styled.div`
     border-radius: 5px;
     background-color: #fff;
     padding: 25px 25px 15px 25px;
@@ -38,18 +38,18 @@ const Term = styled.span`
     font-weight: bold;
 `;
 
-export default class CharDetails extends Component {
+export default class ItemDetails extends Component {
     
     gotService = new gotService();
 
     state = {
-        char: null,
+        item: null,
         loading: false,
         error: false
     }
-    onCharLoaded = (char) => {
+    onItemLoaded = (item) => {
         this.setState({
-            char,
+            item,
             loading: false,
             error: false
         });
@@ -62,57 +62,58 @@ export default class CharDetails extends Component {
         })
     }
     componentDidMount() {
-        this.updateChar();
+        this.updateItem();
     }
     componentDidUpdate(prevProps) {
-        if (this.props.charId !== prevProps.charId) {
-            this.updateChar();
+        if (this.props.itemId !== prevProps.itemId) {
+            this.updateItem();
         }
     }
-    updateChar() {
-        const {charId} = this.props;
-        if (!charId) {
+    updateItem() {
+        const {itemId} = this.props;
+        const {getItem} = this.props;
+        if (!itemId) {
             return;
         }
 
-        this.gotService.getCharacter(charId)
-            .then(this.onCharLoaded)
+        getItem(itemId)
+            .then(this.onItemLoaded)
             .catch(this.onError);
     }
     
     render() {
-        const {char, loading, error} = this.state;
+        const {item, loading, error} = this.state;
         const fieldProps = this.props;
         const errorMessage = error ? <ErrorMessage/> : null;
         const spinner = loading ? <Spinner/> : null;
-        const content = !(loading || error) ? <View char={char} fieldProps={fieldProps}/> : null;
+        const content = !(loading || error) ? <View item={item} fieldProps={fieldProps}/> : null;
 
-        if (!this.state.char) {
+        if (!this.state.item) {
             return <span className="select-error">Please select a character</span>
         }
 
 
         return (
-            <BlockCharDetails>
+            <BlockItemDetails>
                 {errorMessage}
                 {spinner}
                 {content}
-            </BlockCharDetails>
+            </BlockItemDetails>
         );
     }  
 }
 
 class View extends Component {
     render () {
-        const {char} = this.props;
-        const {name} = char;
+        const {item} = this.props;
+        const {name} = item;
         return ( 
             <>
                 <h4>{name}</h4>
                 <ul className="list-group justify-content-between d-flex rounded list-group-flush">
                     {
                         React.Children.map(this.props.fieldProps.children, (child) => {
-                            return React.cloneElement(child, {char})
+                            return React.cloneElement(child, {item})
                         })
                     }
                 </ul>
